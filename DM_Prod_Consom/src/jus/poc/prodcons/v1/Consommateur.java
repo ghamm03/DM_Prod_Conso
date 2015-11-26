@@ -9,13 +9,13 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private Aleatoire p;
 	
 	protected Consommateur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, Aleatoire proba)
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon)
 			throws ControlException {
 		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		
 		this.nbMessLu = 0;
 		this.tampon = tampon;
-		this.p = proba;
+		this.p = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 	}
 
 	/*renvoie le nombre de message a traiter*/
