@@ -23,10 +23,10 @@ public class Consommateur extends Acteur implements _Consommateur {
 		return nbMessLu;
 	}
 	
-	/*lis un ou plusieurs messages*/
+	/*lis un ou plusieurs messages, temps dattente suit une loi gaussienne*/
 	public void run()
 	{	
-		int tpsAttente = 0;
+		int tpsAttente = 0, duree = 0;
 		
 		//while(){
 			try {
@@ -37,10 +37,13 @@ public class Consommateur extends Acteur implements _Consommateur {
 				nbMessLu++;
 				
 				//affichage du message
-				System.out.println("IDCons"+identification() + "a consomme : "+ msg.toString());
-		
+				System.out.println("IDCons"+identification() + "a consomme : "+ msg.toString() + "pendant" + tpsAttente);
+				
+				//le consommateur attends un temps indeterminé
 				tpsAttente = 10*p.next();
 				sleep(tpsAttente);
+				
+				//duree = duree + tpsAttente;
 				
 				} catch ( Exception e) {
 					e.printStackTrace();
