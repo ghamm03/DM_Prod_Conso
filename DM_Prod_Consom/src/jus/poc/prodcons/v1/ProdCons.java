@@ -7,6 +7,10 @@ import jus.poc.prodcons._Producteur;
 
 public class ProdCons implements Tampon {
 
+	public ProdCons(int nbBuffer) {
+
+	}
+
 	@Override
 	public int enAttente() {
 		// TODO Auto-generated method stub
@@ -15,14 +19,14 @@ public class ProdCons implements Tampon {
 
 	@Override
 	public Message get(_Consommateur arg0) throws Exception,
-			InterruptedException {
+	InterruptedException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void put(_Producteur arg0, Message arg1) throws Exception,
-			InterruptedException {
+	InterruptedException {
 		// TODO Auto-generated method stub
 
 	}
