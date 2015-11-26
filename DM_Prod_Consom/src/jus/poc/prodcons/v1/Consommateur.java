@@ -6,14 +6,16 @@ public class Consommateur extends Acteur implements _Consommateur {
 	
 	private int nbMessLu;
 	private Tampon tampon;
+	private Aleatoire p;
 	
-	protected Consommateur(int type, Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon)
+	protected Consommateur(Observateur observateur,
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, Aleatoire proba)
 			throws ControlException {
-		super(type, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
+		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		
 		this.nbMessLu = 0;
 		this.tampon = tampon;
+		this.p = proba;
 	}
 
 	/*renvoie le nombre de message a traiter*/
@@ -21,22 +23,29 @@ public class Consommateur extends Acteur implements _Consommateur {
 		return nbMessLu;
 	}
 	
-	/*lis un seul message*/
+	/*lis un ou plusieurs messages*/
 	public void run()
-	{
-		try {	
-			//recupere le message depuis le tampon
-			Message msg = tampon.get(this);
+	{	
+		int tpsAttente = 0;
+		
+		//while(){
+			try {
+				//recupere le message depuis le tampon
+				Message msg = tampon.get(this);
 				
-			//le consommateur a lu un message
-			nbMessLu++;
+				//le consommateur a lu un message
+				nbMessLu++;
 				
-			//affichage du message
-			System.out.println("\t\tLecture IDCons "+identification() + " : "+msg);
-		} catch ( Exception e) {
-			e.printStackTrace();
-		}
+				//affichage du message
+				System.out.println("IDCons"+identification() + "a consomme : "+ msg.toString());
+		
+				tpsAttente = 10*p.next();
+				sleep(tpsAttente);
+				
+				} catch ( Exception e) {
+					e.printStackTrace();
+				}
+		//}
 	}
 		//System.out.println("Stop : consommateur : " + identification() + " ayant consomme " + nbMessLu + " messages");
-
 }
