@@ -14,7 +14,7 @@ public class MessageX implements Message{
 		this.m = m;
 	}
 
-	public MessageX(MessageX message){m = message;}
+	public MessageX(MessageX message){this.m = message;}
 
 	public String toString() {
 		return "MessageX [m=" + m + "]";
