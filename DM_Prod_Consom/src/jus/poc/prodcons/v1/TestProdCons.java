@@ -59,7 +59,7 @@ public class TestProdCons extends Simulateur{
 		Tampon tamp = new ProdCons(nbBuffer);
 
 		for(int i=0; i<nbCons; i++){
-			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp);
+			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp,0);
 			consos.put(c.identification(),c);
 			c.start();
 		}
