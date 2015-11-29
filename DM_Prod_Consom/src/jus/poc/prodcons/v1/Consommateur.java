@@ -12,12 +12,17 @@ public class Consommateur extends Acteur implements _Consommateur {
 	private Tampon tampon;
 	private Aleatoire p;
 	
-	
-	/*0 pour loi uniforme
-	 *1 pour loi gaussienne*/
+	/**
+	 * Constructeur Consommateur
+	 * @param observateur
+	 * @param moyenneTempsDeTraitement : moyenne des temps de traitement des messages
+	 * @param deviationTempsDeTraitement : ecart-type des temps de traitement des messages
+	 * @param tampon 
+	 * @param loi : type de la loi si loi = 1, c'est une loi gaussienne, sinon loi uniforme
+	 * @throws ControlException
+	 */
 	protected Consommateur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, int loi)
-			throws ControlException {
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, int loi) throws ControlException{
 		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		
 		this.nbMessLu = 0;
@@ -29,36 +34,41 @@ public class Consommateur extends Acteur implements _Consommateur {
 		this.date = 0;
 	}
 
-	/*renvoie le nombre de message a traiter*/
+	/**
+	 * renvoie le nombre de message a traiter
+	 * @return nbreMessLu en integer
+	 */
 	public int nombreDeMessages() {
 		return nbMessLu;
 	}
 	
-	/*renvoie un tps aleatoire de seconde suivant une loi fixées*/
+	/**
+	 * renvoie un tps aleatoire suivant une loi fixées dans le constructeur
+	 * @return le temps en seconde entière
+	 */
 	private int tps_aleatoire(){
 		if(this.loi_fixee == 1)
 			return p.next();
 		return Aleatoire.valeur(m,sigma);
 	}
 	
-	/*retire un message du tampon*/
-	public Message retire()
+	/**
+	 * retire un message du tampon
+	 * @return un objet message
+	 * @throws Exception 
+	 * @throws InterruptedException 
+	 */
+	public Message retire() throws InterruptedException, Exception
 	{	
-		try {
-			return tampon.get(this);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;	
+		return tampon.get(this);
 	}
 	
-	/*consomme un message pendant un temps aléatoire*/
-	public void consomme(Message msg){
-		try {
+	/**
+	 * consomme un message pendant un temps aléatoire
+	 * @param msg message à consommer
+	 * @throws InterruptedException 
+	 */
+	public void consomme(Message msg) throws InterruptedException{
 			//attends
 			int tps_attente;
 			tps_attente = tps_aleatoire();
@@ -70,17 +80,20 @@ public class Consommateur extends Acteur implements _Consommateur {
 			//mise à jour de la date et nbMesslu
 			this.date = this.date + tps_attente;
 			nbMessLu++;
-			
-		}catch (InterruptedException e){
-			e.printStackTrace();
-		}
 	}
 	
+	/**
+	 * montre la consommation totale
+	 */
 	public void fin(){
 		int n = nbMessLu/date;
 		System.out.println("En tout le consommateur : " + identification() + " a consomme " + nbMessLu + " messages" + "pendant" + date + "soit" + n + "message/secondes");
 	} 
 	
+	/**
+	 * renvoie à quel moment le consommateur a lu un message
+	 * @return date en integer
+	 */
 	public int date_cons(){
 		return date;
 	}
