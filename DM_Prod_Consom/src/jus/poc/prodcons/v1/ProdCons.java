@@ -21,7 +21,7 @@ public class ProdCons implements Tampon {
 	}
 
 	@Override
-	public Message get(_Consommateur arg0) throws Exception,
+	public synchronized Message get(_Consommateur arg0) throws Exception,
 	InterruptedException {
 		while(noMessage()){
 			wait();
@@ -32,7 +32,7 @@ public class ProdCons implements Tampon {
 
 
 	@Override
-	public void put(_Producteur arg0, Message arg1) throws Exception,
+	public synchronized void put(_Producteur arg0, Message arg1) throws Exception,
 	InterruptedException {
 		while(isFull()){
 			wait();

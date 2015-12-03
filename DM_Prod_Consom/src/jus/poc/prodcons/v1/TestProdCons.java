@@ -8,6 +8,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
 
+import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Simulateur;
 import jus.poc.prodcons.Tampon;
@@ -58,14 +59,17 @@ public class TestProdCons extends Simulateur{
 		//this.init("src/jus/poc/prodcons/options/optionv1.xml");
 		Tampon tamp = new ProdCons(nbBuffer);
 		for(int i=0; i<nbCons; i++){
-			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp,0);
+			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp);
 			consos.put(c.identification(),c);
 			c.start();
+			System.out.println("consommateur : " + c.identification());
 		}
 		for(int i=0; i<nbProd; i++){
-			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,tamp,0);
+			Aleatoire nb_mess = new Aleatoire(nombreMoyenDeProduction,deviationNombreMoyenDeProduction);
+			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp);
 			prods.put(p.identification(), p);
 			p.start();
+			System.out.println("producteur : " + p.identification());
 		}
 
 

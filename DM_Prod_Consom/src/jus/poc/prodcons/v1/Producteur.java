@@ -3,104 +3,67 @@ package jus.poc.prodcons.v1;
 import jus.poc.prodcons.Acteur;
 import jus.poc.prodcons.Aleatoire;
 import jus.poc.prodcons.ControlException;
+import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Producteur;
 
-//todo : message ou messageX
 public class Producteur extends Acteur implements _Producteur{
 
-	private int nbMessEcrits;
-	private int loi_fixee;
-	private int m;
-	private int sigma;
-	private int date;
-	private Tampon tampon;
-	private Aleatoire p;
-	private MessageX msg;
+	protected int nb_message_max;
+	private int nb_message_ecrit = 0;
+	protected Aleatoire alea_temps;
+	protected Tampon t;
 
 	protected Producteur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, int loi)
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nb_mess, Tampon tamp)
 					throws ControlException {
 		super(Acteur.typeProducteur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 
-		this.nbMessEcrits = 0;
-		this.tampon = tampon;
-		this.p = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		this.loi_fixee = loi;
-		this.m = moyenneTempsDeTraitement;
-		this.sigma = deviationTempsDeTraitement;
-		this.date = 0;
-		this.msg = new MessageX();
+		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+		t = tamp;
+		nb_message_max = nb_mess;
+
 	}
 
+	@Override
+	public void run() {
+		while(prod()){
+			try {
+				Message msg = new MessageX(identification());
+				t.put(this, msg);
+				this.setNb_message_ecrit(getNb_message_ecrit()+1);
+				sleep(alea_temps.next());
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	};
+
 	/**
-	 * renvoie le nombre de message a traiter
-	 * @return nbreMessEcrits en integer
+	 * Retourne le nombre de message restant
 	 */
 	@Override
 	public int nombreDeMessages() {
-		return nbMessEcrits;
+		return this.nb_message_max - this.getNb_message_ecrit();
 	}
 
-	/**
-	 * renvoie un tps aleatoire suivant une loi fixées dans le constructeur
-	 * @return le temps en seconde entière
-	 */
-	private int tps_aleatoire(){
-		if(this.loi_fixee == 1)
-			return p.next();
-		return Aleatoire.valeur(m,sigma);
+	public boolean prod(){
+		return nombreDeMessages()-1 >= 0;
 	}
 
-	//	/**
-	//	 * depose un message du tampon
-	//	 * @return un objet message
-	//	 * @throws Exception
-	//	 * @throws InterruptedException
-	//	 */
-	//	public void depose(MessageX msg) throws InterruptedException, Exception
-	//	{
-	//
-	//	}
-
-	/**
-	 *
-	 * @param msg
-	 * @throws Exception
-	 */
-	public void ecrit(String chaine) throws Exception{
-		//en train d'écrire une poèsie(ca prends du temps)
-		int tps_attente;
-
-		msg.setM(chaine);
-		tps_attente = tps_aleatoire();
-		sleep(tps_attente);
-
-		//consomme
-		System.out.println("IDProd"+identification() + "a écrit : "+ msg.toString() + "pendant" + tps_attente + "a la date" + this.date);
-
-		//mise à jour de la date et nbMesslu
-		this.date = this.date + tps_attente;
-		nbMessEcrits++;
-		tampon.put(this,msg);
-
-	}
-	
-	/**
-	 * montre la consommation totale
-	 */
-	public void fin(){
-		int n = nbMessEcrits/date;
-		System.out.println("En tout le consommateur : " + identification() + " a consomme " + nbMessEcrits + " messages" + "pendant" + date + "soit" + n + "message/secondes");
+	public int getNb_message_ecrit() {
+		return nb_message_ecrit;
 	}
 
-	/**
-	 * renvoie à quel moment le consommateur a lu le message en cours
-	 * @return date en integer
-	 */
-	public int date_cons(){
-		return date;
+	public void setNb_message_ecrit(int nb_message_ecrit) {
+		this.nb_message_ecrit = nb_message_ecrit;
 	}
+
+
+
 
 }
