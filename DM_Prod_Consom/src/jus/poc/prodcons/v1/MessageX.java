@@ -1,21 +1,23 @@
 package jus.poc.prodcons.v1;
 
 import jus.poc.prodcons.Message;
-
+//todo généraliser String
 public class MessageX implements Message{
 	
-	private MessageX m;
+	private String m;
 	
-	public MessageX getM(){
+	public MessageX(){this.m = "";}
+	
+	public String getM(){
 		return m;
 	}
 
-	public void setM(MessageX m) {
+	public void setM(String m) {
 		this.m = m;
 	}
 
-	public MessageX(MessageX message){this.m = message;}
-
+	
+	
 	public String toString() {
 		return "MessageX [m=" + m + "]";
 	}
