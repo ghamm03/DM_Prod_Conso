@@ -86,5 +86,21 @@ public class Producteur extends Acteur implements _Producteur{
 		tampon.put(this,msg);
 
 	}
+	
+	/**
+	 * montre la consommation totale
+	 */
+	public void fin(){
+		int n = nbMessEcrits/date;
+		System.out.println("En tout le consommateur : " + identification() + " a consomme " + nbMessEcrits + " messages" + "pendant" + date + "soit" + n + "message/secondes");
+	}
+
+	/**
+	 * renvoie à quel moment le consommateur a lu le message en cours
+	 * @return date en integer
+	 */
+	public int date_cons(){
+		return date;
+	}
 
 }
