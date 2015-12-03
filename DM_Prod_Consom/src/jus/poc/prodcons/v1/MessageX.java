@@ -6,8 +6,6 @@ public class MessageX implements Message{
 	
 	private String m;
 	
-	public MessageX(){this.m = "";}
-	
 	public String getM(){
 		return m;
 	}
@@ -16,7 +14,7 @@ public class MessageX implements Message{
 		this.m = m;
 	}
 
-	
+	public MessageX(){this.m = "";}
 	
 	public String toString() {
 		return "MessageX [m=" + m + "]";
