@@ -6,31 +6,31 @@ import jus.poc.prodcons.ControlException;
 import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Tampon;
-import jus.poc.prodcons._Consommateur;;
+import jus.poc.prodcons._Consommateur;
 
 public class Consommateur extends Acteur implements _Consommateur {
-	
-	private int nbMessLu; 
+
+	private int nbMessLu;
 	private int loi_fixee;
 	private int m;
 	private int sigma;
 	private int date;
 	private Tampon tampon;
 	private Aleatoire p;
-	
+
 	/**
 	 * Constructeur Consommateur
 	 * @param observateur
 	 * @param moyenneTempsDeTraitement : moyenne des temps de traitement des messages
 	 * @param deviationTempsDeTraitement : ecart-type des temps de traitement des messages
-	 * @param tampon 
+	 * @param tampon
 	 * @param loi : type de la loi si loi = 1, c'est une loi gaussienne, sinon loi uniforme
 	 * @throws ControlException
 	 */
 	protected Consommateur(Observateur observateur,
 			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tampon, int loi) throws ControlException{
 		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		
+
 		this.nbMessLu = 0;
 		this.tampon = tampon;
 		this.p = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
@@ -44,10 +44,11 @@ public class Consommateur extends Acteur implements _Consommateur {
 	 * renvoie le nombre de message a traiter
 	 * @return nbreMessLu en integer
 	 */
+	@Override
 	public int nombreDeMessages() {
 		return nbMessLu;
 	}
-	
+
 	/**
 	 * renvoie un tps aleatoire suivant une loi fixées dans le constructeur
 	 * @return le temps en seconde entière
@@ -57,47 +58,47 @@ public class Consommateur extends Acteur implements _Consommateur {
 			return p.next();
 		return Aleatoire.valeur(m,sigma);
 	}
-	
-	/**
-	 * retire un message du tampon
-	 * @return un objet message
-	 * @throws Exception 
-	 * @throws InterruptedException 
-	 */
-	public Message retire() throws InterruptedException, Exception
-	{	
-		return tampon.get(this);
-	}
-	
+
+	//	/**
+	//	 * retire un message du tampon
+	//	 * @return un objet message
+	//	 * @throws Exception
+	//	 * @throws InterruptedException
+	//	 */
+	//	public Message retire() throws InterruptedException, Exception
+	//	{
+	//		return tampon.get(this);
+	//	}
+
 	/**
 	 * consomme un message pendant un temps aléatoire
 	 * @param msg message à consommer
-	 * @throws InterruptedException 
+	 * @throws Exception
 	 */
-	public void lire(Message msg) throws InterruptedException{
-			//prends son temps pour lire
-			int tps_attente;
-			tps_attente = tps_aleatoire();
-			sleep(tps_attente);
-			
-			//consomme
-			System.out.println("IDCons"+identification() + "a consomme : "+ msg.toString() + "pendant" + tps_attente + "a la date" + this.date);
-			
-			//mise à jour de la date et nbMesslu
-			this.date = this.date + tps_attente;
-			nbMessLu++;
+	public void lire() throws Exception{
+		//prends son temps pour lire
+		int tps_attente;
+		tps_attente = tps_aleatoire();
+		sleep(tps_attente);
+		Message msg = tampon.get(this);
+		//consomme
+		System.out.println("IDCons"+identification() + "a consomme : "+ msg.toString() + "pendant" + tps_attente + "a la date" + this.date);
+
+		//mise à jour de la date et nbMesslu
+		this.date = this.date + tps_attente;
+		nbMessLu++;
 	}
-	
+
 	/**
 	 * montre la consommation totale
 	 */
 	public void fin(){
 		int n = nbMessLu/date;
 		System.out.println("En tout le consommateur : " + identification() + " a consomme " + nbMessLu + " messages" + "pendant" + date + "soit" + n + "message/secondes");
-	} 
-	
+	}
+
 	/**
-	 * renvoie à quel moment le consommateur a lu un message
+	 * renvoie à quel moment le consommateur a lu le message en cours
 	 * @return date en integer
 	 */
 	public int date_cons(){
