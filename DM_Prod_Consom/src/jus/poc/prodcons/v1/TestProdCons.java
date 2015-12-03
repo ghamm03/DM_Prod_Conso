@@ -57,17 +57,18 @@ public class TestProdCons extends Simulateur{
 	protected void run() throws Exception{
 		//this.init("src/jus/poc/prodcons/options/optionv1.xml");
 		Tampon tamp = new ProdCons(nbBuffer);
-
 		for(int i=0; i<nbCons; i++){
 			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp,0);
 			consos.put(c.identification(),c);
 			c.start();
 		}
 		for(int i=0; i<nbProd; i++){
-			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction);
+			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,tamp,0);
 			prods.put(p.identification(), p);
 			p.start();
 		}
+
+
 	}
 
 }
