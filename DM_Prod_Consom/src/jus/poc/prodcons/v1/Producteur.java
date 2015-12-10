@@ -32,6 +32,8 @@ public class Producteur extends Acteur implements _Producteur{
 				Message msg = new MessageX(identification());
 				t.put(this, msg);
 				this.setNb_message_ecrit(getNb_message_ecrit()+1);
+				if(!actif())
+					TestProdCons.prodActif--;
 				sleep(alea_temps.next());
 			} catch (InterruptedException e) {
 				e.printStackTrace();

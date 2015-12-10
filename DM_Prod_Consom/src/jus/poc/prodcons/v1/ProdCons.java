@@ -27,6 +27,8 @@ public class ProdCons implements Tampon {
 			wait();
 		}
 		Message m = list.remove(enAttente()-1);
+		if(TestProdCons.prodActif == 0 && noMessage())
+			TestProdCons.end = true;
 		notifyAll();
 		return m;
 	}

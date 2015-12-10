@@ -29,6 +29,9 @@ public class Consommateur extends Acteur implements _Consommateur {
 				System.out.println("ID : "+identification()+" msg: "+msg);
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
 				sleep(alea_temps.next());
+				if(TestProdCons.end){
+					System.exit(0);
+				}
 
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

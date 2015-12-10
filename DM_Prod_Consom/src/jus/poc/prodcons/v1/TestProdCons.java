@@ -29,6 +29,8 @@ public class TestProdCons extends Simulateur{
 	public int deviationNombreMoyenNbExemplaire = 3;
 	public HashMap<Integer,Consommateur> consos = new HashMap<Integer, Consommateur>();
 	public HashMap<Integer, Producteur> prods = new HashMap<Integer, Producteur>();
+	public static int prodActif = 0;
+	public static boolean end = false;
 
 	public TestProdCons(Observateur observateur) {
 		super(observateur);
@@ -68,8 +70,9 @@ public class TestProdCons extends Simulateur{
 			Aleatoire nb_mess = new Aleatoire(nombreMoyenDeProduction,deviationNombreMoyenDeProduction);
 			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp);
 			prods.put(p.identification(), p);
+			TestProdCons.prodActif++;
 			p.start();
-			System.out.println("producteur : " + p.identification());
+			System.out.println("producteur : " + p.identification()+" nb mess "+p.nb_message_max);
 		}
 
 	}
