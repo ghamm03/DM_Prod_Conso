@@ -10,9 +10,13 @@ import jus.poc.prodcons._Producteur;
 public class ProdCons implements Tampon {
 	private ArrayList<Message> list = new ArrayList<Message>();
 	private int size;
+	protected Semaphore conso;
+	protected Semaphore mutex;
 
 	public ProdCons(int nbBuffer) {
 		setSize(nbBuffer);
+		conso = new Semaphore(0);
+		mutex = new Semaphore(1);
 	}
 
 	@Override
@@ -21,27 +25,29 @@ public class ProdCons implements Tampon {
 	}
 
 	@Override
-	public synchronized Message get(_Consommateur arg0) throws Exception,
+	public Message get(_Consommateur arg0) throws Exception,
 	InterruptedException {
-		while(noMessage()){
-			wait();
-		}
-		Message m = list.remove(enAttente()-1);
+		Message m ;
+		conso.p();
+		mutex.p();
+
+		m = list.remove(enAttente()-1);
 		if(TestProdCons.prodActif == 0 && noMessage())
 			TestProdCons.end = true;
-		notifyAll();
+
+		mutex.signal();
 		return m;
 	}
 
 
 	@Override
-	public synchronized void put(_Producteur arg0, Message arg1) throws Exception,
+	public void put(_Producteur arg0, Message arg1) throws Exception,
 	InterruptedException {
-		while(isFull()){
-			wait();
-		}
+
+		mutex.p();
 		list.add(arg1);
-		notifyAll();
+		mutex.signal();
+		conso.signal();
 	}
 
 	private boolean isFull() {
