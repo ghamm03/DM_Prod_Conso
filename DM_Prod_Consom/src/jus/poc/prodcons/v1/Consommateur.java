@@ -30,7 +30,6 @@ public class Consommateur extends Acteur implements _Consommateur {
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
 				sleep(alea_temps.next());
 
-
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

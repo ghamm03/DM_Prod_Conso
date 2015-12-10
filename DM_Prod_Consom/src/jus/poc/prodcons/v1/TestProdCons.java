@@ -16,17 +16,17 @@ import jus.poc.prodcons.Tampon;
 public class TestProdCons extends Simulateur{
 
 
-	public int nbProd = 1;
+	public int nbProd = 2;
 	public int nbCons = 10;
-	public int nbBuffer = 1;
+	public int nbBuffer = 5;
 	public int tempsMoyenProduction = 10;
 	public int deviationTempsMoyenProduction = 1;
 	public int tempsMoyenConsommation = 10;
 	public int deviationTempsMoyenConsommation = 1;
-	public int nombreMoyenDeProduction;
-	public int deviationNombreMoyenDeProduction;
-	public int nombreMoyenNbExemplaire;
-	public int deviationNombreMoyenNbExemplaire;
+	public int nombreMoyenDeProduction = 5;
+	public int deviationNombreMoyenDeProduction = 1;
+	public int nombreMoyenNbExemplaire = 5;
+	public int deviationNombreMoyenNbExemplaire = 3;
 	public HashMap<Integer,Consommateur> consos = new HashMap<Integer, Consommateur>();
 	public HashMap<Integer, Producteur> prods = new HashMap<Integer, Producteur>();
 
@@ -71,7 +71,6 @@ public class TestProdCons extends Simulateur{
 			p.start();
 			System.out.println("producteur : " + p.identification());
 		}
-
 
 	}
 

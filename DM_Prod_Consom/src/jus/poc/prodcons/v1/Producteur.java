@@ -23,7 +23,6 @@ public class Producteur extends Acteur implements _Producteur{
 		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		t = tamp;
 		nb_message_max = nb_mess;
-
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class Producteur extends Acteur implements _Producteur{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			//JOptionPane.showMessageDialog(null, prod());
 		}
 	};
 
@@ -63,7 +62,9 @@ public class Producteur extends Acteur implements _Producteur{
 		this.nb_message_ecrit = nb_message_ecrit;
 	}
 
-
+	public boolean actif(){
+		return nombreDeMessages()>0;
+	}
 
 
 }
