@@ -59,7 +59,7 @@ public class TestProdCons extends Simulateur{
 	@Override
 	protected void run() throws Exception{
 		//this.init("src/jus/poc/prodcons/options/optionv1.xml");
-		Tampon tamp = new ProdCons(nbBuffer);
+		Tampon tamp = new ProdCons(nbBuffer,observateur);
 		observateur.init(nbProd, nbCons, nbBuffer);
 
 		for(int i=0; i<nbCons; i++){

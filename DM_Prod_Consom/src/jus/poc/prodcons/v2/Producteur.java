@@ -7,6 +7,7 @@ import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Producteur;
+import jus.poc.prodcons.v1.MessageX;
 
 public class Producteur extends Acteur implements _Producteur{
 
@@ -29,8 +30,10 @@ public class Producteur extends Acteur implements _Producteur{
 	public void run() {
 		while(prod()){
 			try {
-				Message msg = new MessageX(identification());
-				t.put(this, msg);
+				Message msg = prodM();
+				depotM(msg);
+				
+				
 				this.setNb_message_ecrit(getNb_message_ecrit()+1);
 				if(!actif())
 					TestProdCons.prodActif--;
@@ -43,6 +46,14 @@ public class Producteur extends Acteur implements _Producteur{
 			//JOptionPane.showMessageDialog(null, prod());
 		}
 	};
+	
+	public void depotM(Message msg) throws InterruptedException, Exception {
+		t.put(this, msg);
+	}
+
+	public Message prodM() {
+		return new MessageX(identification());
+	}
 
 	/**
 	 * Retourne le nombre de message restant

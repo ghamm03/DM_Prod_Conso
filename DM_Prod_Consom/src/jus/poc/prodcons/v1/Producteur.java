@@ -29,20 +29,27 @@ public class Producteur extends Acteur implements _Producteur{
 	public void run() {
 		while(prod()){
 			try {
-				Message msg = new MessageX(identification());
-				t.put(this, msg);
+				Message msg = prodM();
+				depotM(msg);
+				
 				this.setNb_message_ecrit(getNb_message_ecrit()+1);
 				if(!actif())
 					TestProdCons.prodActif--;
 				sleep(alea_temps.next());
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			//JOptionPane.showMessageDialog(null, prod());
 		}
 	};
+
+	public void depotM(Message msg) throws InterruptedException, Exception {
+		t.put(this, msg);
+	}
+
+	public Message prodM() {
+		return new MessageX(identification());
+	}
 
 	/**
 	 * Retourne le nombre de message restant
