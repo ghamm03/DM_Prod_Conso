@@ -30,6 +30,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 				observateur.consommationMessage(this, msg, moyenneTempsDeTraitement);
 				consumM(msg);
 				
+				
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
 				sleep(alea_temps.next());
 				if(TestProdCons.end){
