@@ -70,7 +70,8 @@ public class TestProdCons extends Simulateur{
 		}
 		for(int i=0; i<nbProd; i++){
 			Aleatoire nb_mess = new Aleatoire(nombreMoyenDeProduction,deviationNombreMoyenDeProduction);
-			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp);
+			Aleatoire nb_exemp = new Aleatoire(nombreMoyenNbExemplaire, deviationNombreMoyenNbExemplaire);
+			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),nb_exemp,tamp);
 			prods.put(p.identification(), p);
 			TestProdCons.prodActif++;
 			p.start();

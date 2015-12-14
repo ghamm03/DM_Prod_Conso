@@ -7,7 +7,6 @@ import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Observateur;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Producteur;
-import jus.poc.prodcons.v1.MessageX;
 
 public class Producteur extends Acteur implements _Producteur{
 
@@ -15,9 +14,11 @@ public class Producteur extends Acteur implements _Producteur{
 	private int nb_message_ecrit = 0;
 	protected Aleatoire alea_temps;
 	protected Tampon t;
+	protected Aleatoire nb_copy;
 
 	protected Producteur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nb_mess, Tampon tamp)
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nb_mess,
+			Aleatoire nb_exemp, Tampon tamp)
 					throws ControlException {
 		super(Acteur.typeProducteur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 
@@ -25,6 +26,7 @@ public class Producteur extends Acteur implements _Producteur{
 		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		t = tamp;
 		nb_message_max = nb_mess;
+		nb_copy = nb_exemp;
 	}
 
 	@Override
@@ -33,8 +35,8 @@ public class Producteur extends Acteur implements _Producteur{
 			try {
 				Message msg = prodM();
 				observateur.productionMessage(this, msg, moyenneTempsDeTraitement);
-				depotM(msg);			
-				
+				depotM(msg);
+
 				this.setNb_message_ecrit(getNb_message_ecrit()+1);
 				if(!actif())
 					TestProdCons.prodActif--;
@@ -51,9 +53,9 @@ public class Producteur extends Acteur implements _Producteur{
 	}
 
 	public Message prodM() {
-		return new MessageX(identification());
+		return new MessageX(identification(),nb_copy.next());
 	}
-	
+
 	/**
 	 * Retourne le nombre de message restant
 	 */
