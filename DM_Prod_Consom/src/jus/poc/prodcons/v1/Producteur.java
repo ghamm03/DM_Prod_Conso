@@ -31,10 +31,7 @@ public class Producteur extends Acteur implements _Producteur{
 			try {
 				Message msg = prodM();
 				depotM(msg);
-				
-				this.setNb_message_ecrit(getNb_message_ecrit()+1);
-				if(!actif())
-					TestProdCons.prodActif--;
+				this.setNb_message_ecrit(nb_message_ecrit+1);
 				sleep(alea_temps.next());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -47,7 +44,7 @@ public class Producteur extends Acteur implements _Producteur{
 		t.put(this, msg);
 	}
 
-	public Message prodM() {
+	public MessageX prodM() {
 		return new MessageX(identification());
 	}
 
@@ -72,7 +69,7 @@ public class Producteur extends Acteur implements _Producteur{
 	}
 
 	public boolean actif(){
-		return nombreDeMessages()>0;
+		return nombreDeMessages()-1>0;
 	}
 
 

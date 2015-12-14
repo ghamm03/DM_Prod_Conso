@@ -17,7 +17,6 @@ public class Consommateur extends Acteur implements _Consommateur {
 			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tamp)
 					throws ControlException {
 		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
-		observateur.newConsommateur(this);
 		t = tamp;
 		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 	}
@@ -26,13 +25,14 @@ public class Consommateur extends Acteur implements _Consommateur {
 	public void run() {
 		while(true){
 			try {
+				int temps = alea_temps.next();
 				Message msg = retraitM();
-				observateur.consommationMessage(this, msg, moyenneTempsDeTraitement);
+				observateur.retraitMessage(this, msg);
 				consumM(msg);
-				
-				
+				observateur.consommationMessage(this, msg, temps);
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
-				sleep(alea_temps.next());
+				sleep(temps);
+				Thread.yield();
 				if(TestProdCons.end){
 					System.exit(0);
 				}
@@ -43,9 +43,9 @@ public class Consommateur extends Acteur implements _Consommateur {
 			}
 		}
 	}
-	
+
 	public void consumM(Message msg) {
-		System.out.println("Consommateur : "+identification()+" msg: "+msg);	
+		System.out.println("Consommateur : "+identification()+" msg: "+msg);
 	}
 
 	private Message retraitM() throws InterruptedException, Exception {
@@ -53,7 +53,7 @@ public class Consommateur extends Acteur implements _Consommateur {
 	}
 
 	/**
-	 * Retourne nombre de message consomm�
+	 * Retourne nombre de message consomm
 	 */
 	@Override
 	public int nombreDeMessages() {

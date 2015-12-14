@@ -1,23 +1,25 @@
 package jus.poc.prodcons.v1;
 
-import java.util.ArrayList;
-
 import jus.poc.prodcons.Message;
 import jus.poc.prodcons.Tampon;
 import jus.poc.prodcons._Consommateur;
 import jus.poc.prodcons._Producteur;
 
 public class ProdCons implements Tampon {
-	private ArrayList<Message> list = new ArrayList<Message>();
+	private Message[] buffer;
 	private int size;
+	private int out = 0;
+	private int in = 0;
+	private int nbmsg = 0;
 
 	public ProdCons(int nbBuffer) {
 		setSize(nbBuffer);
+		buffer = new Message[nbBuffer];
 	}
 
 	@Override
 	public int enAttente() {
-		return list.size();
+		return nbmsg;
 	}
 
 	@Override
@@ -26,7 +28,10 @@ public class ProdCons implements Tampon {
 		while(noMessage()){
 			wait();
 		}
-		Message m = list.remove(enAttente()-1);
+		Message m = buffer[out];
+		out = (out+1)%size;
+		nbmsg--;
+
 		if(TestProdCons.prodActif == 0 && noMessage())
 			TestProdCons.end = true;
 		notifyAll();
@@ -40,12 +45,20 @@ public class ProdCons implements Tampon {
 		while(isFull()){
 			wait();
 		}
-		list.add(arg1);
+
+		if(!((Producteur) arg0).actif()){
+			TestProdCons.prodActif--;
+		}
+
+		buffer[in] = arg1;
+		in = (in+1)%size;
+		nbmsg++;
+
 		notifyAll();
 	}
 
 	private boolean isFull() {
-		return list.size()==getSize();
+		return nbmsg==getSize();
 	}
 
 	@Override
@@ -54,7 +67,7 @@ public class ProdCons implements Tampon {
 	}
 
 	private boolean noMessage() {
-		return list.size()==0;
+		return nbmsg==0;
 	}
 
 	public int getSize() {

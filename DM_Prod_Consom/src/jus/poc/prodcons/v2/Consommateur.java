@@ -27,9 +27,10 @@ public class Consommateur extends Acteur implements _Consommateur {
 			try {
 				Message msg = retraitM();
 				consumM(msg);
-				
+
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
 				sleep(alea_temps.next());
+				Thread.yield();
 				if(TestProdCons.end){
 					System.exit(0);
 				}
@@ -40,9 +41,9 @@ public class Consommateur extends Acteur implements _Consommateur {
 			}
 		}
 	}
-	
+
 	public void consumM(Message msg) {
-		System.out.println("Consommateur : "+identification()+" msg: "+msg);	
+		System.out.println("Consommateur : "+identification()+" msg: "+msg);
 	}
 
 	private Message retraitM() throws InterruptedException, Exception {
