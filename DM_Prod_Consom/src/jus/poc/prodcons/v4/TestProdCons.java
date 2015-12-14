@@ -1,4 +1,4 @@
-package jus.poc.prodcons.v3;
+package jus.poc.prodcons.v4;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -70,7 +70,8 @@ public class TestProdCons extends Simulateur{
 		}
 		for(int i=0; i<nbProd; i++){
 			Aleatoire nb_mess = new Aleatoire(nombreMoyenDeProduction,deviationNombreMoyenDeProduction);
-			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp);
+			Aleatoire nb_copy = new Aleatoire(nombreMoyenNbExemplaire, deviationNombreMoyenNbExemplaire);
+			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),nb_copy,tamp);
 			prods.put(p.identification(), p);
 			observateur.newProducteur(p);
 			TestProdCons.prodActif++;

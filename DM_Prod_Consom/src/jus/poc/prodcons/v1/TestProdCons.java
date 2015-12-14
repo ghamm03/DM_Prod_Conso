@@ -16,17 +16,17 @@ import jus.poc.prodcons.Tampon;
 public class TestProdCons extends Simulateur{
 
 
-	public int nbProd = 2;
-	public int nbCons = 10;
-	public int nbBuffer = 5;
-	public int tempsMoyenProduction = 10;
-	public int deviationTempsMoyenProduction = 1;
-	public int tempsMoyenConsommation = 10;
-	public int deviationTempsMoyenConsommation = 1;
-	public int nombreMoyenDeProduction = 5;
-	public int deviationNombreMoyenDeProduction = 1;
-	public int nombreMoyenNbExemplaire = 5;
-	public int deviationNombreMoyenNbExemplaire = 3;
+	public int nbProd;
+	public int nbCons;
+	public int nbBuffer;
+	public int tempsMoyenProduction;
+	public int deviationTempsMoyenProduction;
+	public int tempsMoyenConsommation;
+	public int deviationTempsMoyenConsommation;
+	public int nombreMoyenDeProduction;
+	public int deviationNombreMoyenDeProduction;
+	public int nombreMoyenNbExemplaire;
+	public int deviationNombreMoyenNbExemplaire;
 	public HashMap<Integer,Consommateur> consos = new HashMap<Integer, Consommateur>();
 	public HashMap<Integer, Producteur> prods = new HashMap<Integer, Producteur>();
 	public static int prodActif = 0;
@@ -58,7 +58,7 @@ public class TestProdCons extends Simulateur{
 
 	@Override
 	protected void run() throws Exception{
-		//this.init("src/jus/poc/prodcons/options/optionv1.xml");
+		this.init("src/jus/poc/prodcons/options/option1.xml");
 		Tampon tamp = new ProdCons(nbBuffer);
 		for(int i=0; i<nbCons; i++){
 			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp);
