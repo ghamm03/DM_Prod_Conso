@@ -11,18 +11,26 @@ public class ProdCons implements Tampon {
 	private int out = 0;
 	private int in = 0;
 	private int nbmsg = 0;
-
+	
+	/**
+	 * Constructeur du buffer - les producteurs placent les messages dans le tampon et les consommateurs retirent des messages
+	 * @param nbBuffer taille du buffer
+	 */
 	public ProdCons(int nbBuffer) {
 		setSize(nbBuffer);
 		buffer = new Message[nbBuffer];
 	}
 
-	@Override
+	/**
+	 * retourne le nombre de message dans le buffer
+	 */
 	public int enAttente() {
 		return nbmsg;
 	}
 
-	@Override
+	/**
+	 * retire un message du buffer par un consommateur
+	 */
 	public synchronized Message get(_Consommateur arg0) throws Exception,
 	InterruptedException {
 		while(noMessage()){
@@ -39,7 +47,9 @@ public class ProdCons implements Tampon {
 	}
 
 
-	@Override
+	/**
+	 * place un message dans un buffer par un producteur
+	 */
 	public synchronized void put(_Producteur arg0, Message arg1) throws Exception,
 	InterruptedException {
 		while(isFull()){
@@ -56,24 +66,42 @@ public class ProdCons implements Tampon {
 
 		notifyAll();
 	}
-
+	
+	/**
+	 * vrai si le buffer est plein, sinon faux
+	 * @return boolean teste si le buffer est plein
+	 */
 	private boolean isFull() {
 		return nbmsg==getSize();
 	}
 
-	@Override
+	/**
+	 * retourne la taille du buffer
+	 */
 	public int taille() {
 		return getSize();
 	}
-
+	
+	/**
+	 * vrai si le buffer est vide sinon faux
+	 * @return boolean teste si le buffer est vide ou plein
+	 */
 	private boolean noMessage() {
 		return nbmsg==0;
 	}
-
+	
+	/**
+	 * retourne la taille du buffer
+	 * @return la taille du buffer
+	 */
 	public int getSize() {
 		return size;
 	}
-
+	
+	/**
+	 * modifie la taille du buffer
+	 * @param size nouvelle taille du buffer
+	 */
 	public void setSize(int size) {
 		this.size = size;
 	}

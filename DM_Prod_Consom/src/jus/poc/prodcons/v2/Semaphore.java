@@ -3,14 +3,18 @@ package jus.poc.prodcons.v2;
 public class Semaphore {
 
 	protected int res;
-
+	
+	/**
+	 * Constructeur semaphore
+	 * @param val nombre de ressources
+	 */
 	public Semaphore(int val){
 		res = val;
 	}
 
 	/**
-	 * Wait	dÈcrÈmente le sÈmaphore
-	 * @throws InterruptedException
+	 * d√©cr√©mente le s√©maphore. Si le nombre de ressources est n√©gatif , les threads sont mis en liste d'attente.
+	 * @throws InterruptedException .
 	 */
 	public synchronized void p() throws InterruptedException{
 		res--;
@@ -20,7 +24,7 @@ public class Semaphore {
 	}
 
 	/**
-	 * Signal incrÈmente le sÈmaphore
+	 * incr√©mente le s√©maphore. Si le nombre de ressource est disponible, alors r√©veil des threads
 	 */
 	public synchronized void signal(){
 		res++;
