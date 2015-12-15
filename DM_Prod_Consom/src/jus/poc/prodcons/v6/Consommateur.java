@@ -12,13 +12,15 @@ public class Consommateur extends Acteur implements _Consommateur {
 	protected Tampon t;
 	protected Aleatoire alea_temps;
 	private int nb_msg_lu = 0;
+	private MyObservateur myObs;
 
 	protected Consommateur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tamp)
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, Tampon tamp, MyObservateur obs)
 					throws ControlException {
 		super(Acteur.typeConsommateur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		t = tamp;
 		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
+		myObs = obs;
 	}
 
 	@Override
@@ -28,8 +30,10 @@ public class Consommateur extends Acteur implements _Consommateur {
 				int temps = alea_temps.next();
 				Message msg = retraitM();
 				observateur.retraitMessage(this, msg);
+				myObs.retraitMessage(this, msg);
 				consumM(msg);
 				observateur.consommationMessage(this, msg, temps);
+				myObs.consommationMessage(this, msg, temps);
 				this.setNb_msg_lu(getNb_msg_lu() + 1);
 				sleep(temps);
 				Thread.yield();

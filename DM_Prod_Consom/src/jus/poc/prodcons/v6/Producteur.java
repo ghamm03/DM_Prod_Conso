@@ -15,15 +15,17 @@ public class Producteur extends Acteur implements _Producteur{
 	private int nb_message_ecrit = 0;
 	protected Aleatoire alea_temps;
 	protected Tampon t;
+	protected MyObservateur myObs;
 
 	protected Producteur(Observateur observateur,
-			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nb_mess, Tampon tamp)
+			int moyenneTempsDeTraitement, int deviationTempsDeTraitement, int nb_mess, Tampon tamp, MyObservateur obs)
 					throws ControlException {
 		super(Acteur.typeProducteur, observateur, moyenneTempsDeTraitement, deviationTempsDeTraitement);
 
 		alea_temps = new Aleatoire(moyenneTempsDeTraitement, deviationTempsDeTraitement);
 		t = tamp;
 		nb_message_max = nb_mess;
+		myObs = obs;
 	}
 
 	@Override
@@ -33,6 +35,7 @@ public class Producteur extends Acteur implements _Producteur{
 				int temps = alea_temps.next();
 				Message msg = prodM();
 				observateur.productionMessage(this, msg, temps);
+				myObs.productionMessage(this, msg, temps);
 				depotM(msg);
 				this.setNb_message_ecrit(nb_message_ecrit+1);
 				sleep(temps);
@@ -46,6 +49,7 @@ public class Producteur extends Acteur implements _Producteur{
 	public void depotM(Message msg) throws InterruptedException, Exception {
 		t.put(this, msg);
 		observateur.depotMessage(this, msg);
+		myObs.depotMessage(this, msg);
 	}
 
 	public MessageX prodM() {

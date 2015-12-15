@@ -31,13 +31,15 @@ public class TestProdCons extends Simulateur{
 	public HashMap<Integer, Producteur> prods = new HashMap<Integer, Producteur>();
 	public static int prodActif = 0;
 	public static boolean end = false;
+	public MyObservateur myObs;
 
-	public TestProdCons(Observateur observateur) {
+	public TestProdCons(Observateur observateur, MyObservateur obs) {
 		super(observateur);
+		myObs = obs;
 	}
 
 	public static void main(String[] args){
-		new TestProdCons(new Observateur()).start();
+		new TestProdCons(new Observateur(), new MyObservateur()).start();
 	}
 
 	protected void init(String file) throws InvalidPropertiesFormatException, FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -61,18 +63,21 @@ public class TestProdCons extends Simulateur{
 		this.init("src/jus/poc/prodcons/options/option1.xml");
 		Tampon tamp = new ProdCons(nbBuffer);
 		observateur.init(nbProd, nbCons, nbBuffer);
+		myObs.init(nbProd, nbCons, nbBuffer);
 		for(int i=0; i<nbCons; i++){
-			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp);
+			Consommateur c = new Consommateur(observateur, tempsMoyenConsommation, deviationTempsMoyenConsommation, tamp, myObs);
 			consos.put(c.identification(),c);
 			observateur.newConsommateur(c);
+			myObs.newConsommateur(c);
 			c.start();
 			System.out.println("consommateur : " + c.identification());
 		}
 		for(int i=0; i<nbProd; i++){
 			Aleatoire nb_mess = new Aleatoire(nombreMoyenDeProduction,deviationNombreMoyenDeProduction);
-			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp);
+			Producteur p = new Producteur(observateur, tempsMoyenProduction, deviationTempsMoyenProduction,nb_mess.next(),tamp, myObs);
 			prods.put(p.identification(), p);
 			observateur.newProducteur(p);
+			myObs.newProducteur(p);
 			TestProdCons.prodActif++;
 			p.start();
 			System.out.println("producteur : " + p.identification()+" nb mess "+p.nb_message_max);
