@@ -32,16 +32,35 @@ public class TestProdCons extends Simulateur{
 	public static int prodActif = 0;
 	public static boolean end = false;
 	public MyObservateur myObs;
-
+	
+	/**
+	 * construit un testProdCons
+	 * @param observateur observateur
+	 */
 	public TestProdCons(Observateur observateur, MyObservateur obs) {
 		super(observateur);
 		myObs = obs;
 	}
-
+	
+	/**
+	 * main
+	 * @param args
+	 */
 	public static void main(String[] args){
 		new TestProdCons(new Observateur(), new MyObservateur()).start();
 	}
-
+	
+	/**
+	 * initialise
+	 * @param file
+	 * @throws InvalidPropertiesFormatException .
+	 * @throws FileNotFoundException .
+	 * @throws IOException .
+	 * @throws IllegalArgumentException .
+	 * @throws IllegalAccessException .
+	 * @throws NoSuchFieldException .
+	 * @throws SecurityException .
+	 */
 	protected void init(String file) throws InvalidPropertiesFormatException, FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		Properties properties = new Properties();
 		//properties.loadFromXML(ClassLoader.getSystemResourceAsStream(file));
@@ -58,7 +77,9 @@ public class TestProdCons extends Simulateur{
 		}
 	}
 
-	@Override
+	/**
+	 * lance l'algorithme du producteur consommateur
+	 */
 	protected void run() throws Exception{
 		this.init("src/jus/poc/prodcons/options/option1.xml");
 		Tampon tamp = new ProdCons(nbBuffer);

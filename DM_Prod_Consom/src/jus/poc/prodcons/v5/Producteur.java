@@ -19,7 +19,7 @@ public class Producteur extends Acteur implements _Producteur{
 	/**
 	 * Construit un producteur
 	 * @param observateur observateur
-	 *@param moyenneTempsDeTraitement moyenne des tirages de la variable aléatoire
+	 * @param moyenneTempsDeTraitement moyenne des tirages de la variable aléatoire
 	 * @param deviationTempsDeTraitement écart-type des tirages de la variable aléatoire
 	 * @param nb_mess nombre de message à produire ou écrire
 	 * @param tamp définit un tampon entre un producteur et un consommateur
